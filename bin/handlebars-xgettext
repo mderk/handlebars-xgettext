@@ -20,6 +20,8 @@ var argv = require('optimist')
     'directory': 'add directory to list for input files search',
     'output': 'write output to specified file',
     'from-code': 'encoding of input files',
+    'to-code': 'output file encoding',
+    'plural-forms': 'plural forms rules',
     'keyword': 'additional keyword to be looked for',
     'force-po': 'write PO file even if empty',
     'version': 'output version information and exit'
@@ -27,7 +29,9 @@ var argv = require('optimist')
   .default({
     'from-code': 'ascii',
     'keyword': ['gettext', '_'],
-    'force-po': false
+    'force-po': false,
+    'plural-forms': 'nplurals=2; plural=(n!=1)',
+    'to-code': 'iso-8859-1'
   })
   .check(function (argv) {
     argv['from-code'] = argv['from-code'].toLowerCase().replace(/\W/g, '');
@@ -36,6 +40,9 @@ var argv = require('optimist')
     }
     if (!argv._ && !argv['files-from'] && !argv.directory) {
       throw 'No input specified.'.red;
+    }
+    if (argv['from-code'] == 'utf8') {
+        argv['to-code'] = 'UTF-8';
     }
   })
   .argv;
